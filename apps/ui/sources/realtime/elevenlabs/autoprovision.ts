@@ -337,6 +337,7 @@ export async function createHappierElevenLabsAgent(params: { apiKey: string; tts
       body: JSON.stringify({
         name: HAPPIER_ELEVENLABS_AGENT_NAME,
         conversation_config: {
+          turn: { turn_timeout: -1 },
           tts: buildTtsConfig(params.tts),
           agent: {
             prompt: {
