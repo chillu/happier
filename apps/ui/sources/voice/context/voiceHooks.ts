@@ -1,4 +1,5 @@
 import {
+  formatMessage,
   formatNewMessages,
   formatPermissionRequest,
   formatReadyEvent,
@@ -207,11 +208,49 @@ export const voiceHooks = {
     return prompt;
   },
 
-  onReady(sessionId: string) {
+  onReady(sessionId: string, batchMessages?: Message[]) {
     if (VOICE_CONFIG.DISABLE_READY_EVENTS) return;
 
     reportSession(sessionId);
-    reportTextUpdate(sessionId, formatReadyEvent(sessionId));
+
+    // Include recent agent-text content in the text update so the voice agent
+    // receives both the content and the trigger to speak in a single user message.
+    // The ready event may arrive in a separate batch from the content messages,
+    // so fall back to the stored session messages if the batch has no agent-text.
+    const prefs = getVoiceContextPrefs(sessionId);
+    let content: string | undefined;
+
+    const batchAgentTexts = (Array.isArray(batchMessages) ? batchMessages : [])
+      .filter((m) => m.kind === 'agent-text');
+
+    const agentTexts = batchAgentTexts.length > 0
+      ? batchAgentTexts
+      : ((storage.getState() as any).sessionMessages?.[sessionId]?.messages ?? [])
+          .filter((m: Message) => m.kind === 'agent-text');
+
+    if (agentTexts.length > 0) {
+      const recent = agentTexts
+        .sort((a: Message, b: Message) => a.createdAt - b.createdAt)
+        .slice(-3);
+      const formatted = recent.map((m: Message) => formatMessage(m, prefs)).filter(Boolean);
+      if (formatted.length > 0) {
+        content = formatted.join('\n\n');
+      }
+    }
+
+    if (VOICE_CONFIG.ENABLE_DEBUG_LOGGING) {
+      // eslint-disable-next-line no-console
+      console.log('🎤 Voice: onReady', {
+        sessionId,
+        batchMessageCount: batchMessages?.length ?? 0,
+        batchAgentTextCount: batchAgentTexts.length,
+        totalAgentTextCount: agentTexts.length,
+        hasContent: !!content,
+        contentLength: content?.length ?? 0,
+      });
+    }
+
+    reportTextUpdate(sessionId, formatReadyEvent(sessionId, content));
   },
 
   onVoiceStopped() {

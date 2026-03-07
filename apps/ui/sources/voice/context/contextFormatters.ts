@@ -198,6 +198,10 @@ export function formatSessionFocus(sessionId: string, metadata?: SessionMetadata
     return `Session became focused: ${sessionId}`;
 }
 
-export function formatReadyEvent(sessionId: string): string {
-    return `Coding assistant done working in session: ${sessionId}. The previous message(s) summarize the work done. Report this to the human immediately.`;
+export function formatReadyEvent(sessionId: string, content?: string): string {
+    const header = `Coding assistant done working in session: ${sessionId}.`;
+    if (content) {
+        return `${header}\n\nHere is the result:\n${content}\n\nReport this to the human immediately.`;
+    }
+    return `${header} The previous message(s) summarize the work done. Report this to the human immediately.`;
 }

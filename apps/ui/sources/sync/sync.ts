@@ -2067,7 +2067,7 @@ class Sync {
                 voiceHooks.onMessages(sessionId, m);
             }
             if (result.hasReadyEvent) {
-                voiceHooks.onReady(sessionId);
+                voiceHooks.onReady(sessionId, m);
             }
         }
     }
