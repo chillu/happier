@@ -878,7 +878,8 @@ export const ACTION_SPECS: readonly ActionSpec[] = Object.freeze([
   {
     id: 'session.message.send',
     title: 'Send a message to a session',
-    description: 'Send a user message to the AI coding assistant inside the specified session.',
+    description:
+      'Default tool for most codebase questions and edits (use ~99% of the time). Send a user message to the AI coding assistant inside the specified session.',
     safety: 'safe',
     placements: ['voice_panel'],
     bindings: { voiceClientToolName: 'sendSessionMessage' },
