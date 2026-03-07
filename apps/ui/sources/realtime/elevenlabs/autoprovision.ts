@@ -133,6 +133,27 @@ export async function findExistingHappierElevenLabsAgents(params: { apiKey: stri
   return out;
 }
 
+function coerceEnumValuesToStrings(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map((v) => coerceEnumValuesToStrings(v));
+  if (!value || typeof value !== 'object') return value;
+  const record = value as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  let hadNumericEnum = false;
+  for (const [k, v] of Object.entries(record)) {
+    if (k === 'enum' && Array.isArray(v)) {
+      hadNumericEnum = v.some((item) => typeof item === 'number');
+      out[k] = v.map((item) => (typeof item === 'number' ? String(item) : item));
+    } else {
+      out[k] = coerceEnumValuesToStrings(v);
+    }
+  }
+  // ElevenLabs requires enum values to match the declared type.
+  if (hadNumericEnum && out.type === 'number') {
+    out.type = 'string';
+  }
+  return out;
+}
+
 function normalizeToolParametersSchema(schema: unknown): Record<string, unknown> {
   const obj = schema && typeof schema === 'object' && !Array.isArray(schema) ? (schema as any) : {};
   const out: Record<string, unknown> = { ...obj };
@@ -147,7 +168,7 @@ function normalizeToolParametersSchema(schema: unknown): Record<string, unknown>
     if (!required.includes('sessionId')) required.push('sessionId');
     (out as any).required = required;
   }
-  return out;
+  return coerceEnumValuesToStrings(out) as Record<string, unknown>;
 }
 
 function buildClientToolConfig(spec: { name: string; description: string; parameters: unknown }): Record<string, unknown> {
