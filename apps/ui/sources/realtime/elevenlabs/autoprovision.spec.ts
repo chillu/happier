@@ -83,6 +83,7 @@ describe('ElevenLabs BYO autoprov', () => {
     const body = JSON.parse(fetchMock().mock.calls[1]?.[1]?.body);
     expect(body.conversation_config.agent.prompt.tool_ids).toEqual(requiredToolNames.map((name) => `tool_${name}`));
     expect(body.conversation_config.tts?.voice_id).toBe('EST9Ui6982FZPSi7gCHi');
+    expect(body.conversation_config.tts?.model_id).toBe('eleven_turbo_v2_5');
     expect(body.conversation_config.agent.prompt.prompt).toContain('{{initialConversationContext}}');
     expect(body.conversation_config.agent.prompt.prompt).toContain('{{sessionId}}');
     expect(String(body.conversation_config.agent.prompt.prompt)).not.toMatch(/Claude Code/i);

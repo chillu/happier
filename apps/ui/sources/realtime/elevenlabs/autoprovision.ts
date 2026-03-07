@@ -1,6 +1,6 @@
 import { elevenLabsFetchJson } from './elevenLabsApi';
 import { buildElevenLabsVoiceAgentPrompt } from '@happier-dev/agents';
-import { DEFAULT_ELEVENLABS_VOICE_ID } from './defaults';
+import { DEFAULT_ELEVENLABS_TTS_MODEL_ID, DEFAULT_ELEVENLABS_VOICE_ID } from './defaults';
 import { storage } from '@/sync/domains/state/storage';
 import { resolveElevenLabsRequiredClientTools } from './requiredClientTools';
 import { listVoiceToolActionSpecs } from '@happier-dev/protocol';
@@ -338,7 +338,10 @@ export async function createHappierElevenLabsAgent(params: { apiKey: string; tts
         name: HAPPIER_ELEVENLABS_AGENT_NAME,
         conversation_config: {
           turn: { turn_timeout: -1 },
-          tts: buildTtsConfig(params.tts),
+          tts: buildTtsConfig({
+            ...params.tts,
+            modelId: normalizeStringOrNull(params.tts?.modelId) ?? DEFAULT_ELEVENLABS_TTS_MODEL_ID,
+          }),
           agent: {
             prompt: {
               prompt,

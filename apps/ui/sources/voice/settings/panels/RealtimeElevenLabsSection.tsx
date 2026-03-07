@@ -17,6 +17,7 @@ import {
   findExistingHappierElevenLabsAgents,
   updateHappierElevenLabsAgent,
 } from '@/realtime/elevenlabs/autoprovision';
+import { DEFAULT_ELEVENLABS_TTS_MODEL_ID } from '@/realtime/elevenlabs/defaults';
 import { listElevenLabsVoices, type ElevenLabsVoiceSummary } from '@/realtime/elevenlabs/elevenLabsVoices';
 import { showElevenLabsAgentReuseDialog } from '@/voice/settings/modals/showElevenLabsAgentReuseDialog';
 
@@ -347,13 +348,12 @@ export function RealtimeElevenLabsSection(props: {
             title: 'Model',
             subtitle: 'Optional: override the ElevenLabs TTS model id.',
             showSelectedSubtitle: false,
-            detailFormatter: () => (tts.modelId ?? 'Auto'),
+            detailFormatter: () => (tts.modelId ?? DEFAULT_ELEVENLABS_TTS_MODEL_ID),
           }}
           items={[
-            { id: '', title: 'Auto', subtitle: 'Use the ElevenLabs default model.' },
-            { id: 'eleven_multilingual_v2', title: 'eleven_multilingual_v2', subtitle: 'Common default (multilingual).' },
+            { id: '', title: DEFAULT_ELEVENLABS_TTS_MODEL_ID, subtitle: 'Default (cheaper, 32 languages).' },
+            { id: 'eleven_multilingual_v2', title: 'eleven_multilingual_v2', subtitle: 'Higher quality, higher cost.' },
             { id: 'eleven_turbo_v2', title: 'eleven_turbo_v2', subtitle: 'Lower latency (if available on your plan).' },
-            { id: 'eleven_turbo_v2_5', title: 'eleven_turbo_v2_5', subtitle: 'Turbo 2.5 (if available).' },
             { id: 'custom', title: 'Custom…', subtitle: 'Enter a model id.' },
           ]}
           onSelect={(id) => {
@@ -362,7 +362,7 @@ export function RealtimeElevenLabsSection(props: {
                 const raw = await Modal.prompt(
                   'Model id',
                   'Enter an ElevenLabs model id, or leave blank to use the default.',
-                  { placeholder: tts.modelId ?? 'eleven_multilingual_v2' },
+                  { placeholder: tts.modelId ?? DEFAULT_ELEVENLABS_TTS_MODEL_ID },
                 );
                 if (raw === null) return;
                 const trimmed = String(raw).trim();
