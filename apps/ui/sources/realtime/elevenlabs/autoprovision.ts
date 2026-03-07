@@ -153,7 +153,8 @@ function normalizeToolParametersSchema(schema: unknown): Record<string, unknown>
 function buildClientToolConfig(spec: { name: string; description: string; parameters: unknown }): Record<string, unknown> {
   const resolveTimeoutSecs = (toolName: string): number => {
     // User-in-the-loop tools can take longer than typical tool calls.
-    if (toolName === 'spawnSessionPicker') return 300;
+    // ElevenLabs caps response_timeout_secs at 120.
+    if (toolName === 'spawnSessionPicker') return 120;
     return 60;
   };
 
