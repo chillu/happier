@@ -1,3 +1,11 @@
+function isDebugLoggingEnabled(): boolean {
+  if (process.env.PUBLIC_EXPO_DANGEROUSLY_LOG_TO_SERVER_FOR_AI_AUTO_DEBUGGING) return true;
+  try {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('happier.voice.debug') === '1') return true;
+  } catch { /* SSR / non-browser */ }
+  return false;
+}
+
 /**
  * Static voice context configuration.
  *
@@ -19,7 +27,8 @@ export const VOICE_CONFIG = {
   /** Disable ready event notifications */
   DISABLE_READY_EVENTS: false,
 
-  /** Enable debug logging for voice context updates */
-  ENABLE_DEBUG_LOGGING: Boolean(process.env.PUBLIC_EXPO_DANGEROUSLY_LOG_TO_SERVER_FOR_AI_AUTO_DEBUGGING),
+  /** Enable debug logging for voice context updates.
+   * Toggle at runtime via: localStorage.setItem('happier.voice.debug', '1') */
+  get ENABLE_DEBUG_LOGGING() { return isDebugLoggingEnabled(); },
 } as const;
 
