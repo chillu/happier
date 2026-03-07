@@ -17,7 +17,7 @@ import {
   findExistingHappierElevenLabsAgents,
   updateHappierElevenLabsAgent,
 } from '@/realtime/elevenlabs/autoprovision';
-import { DEFAULT_ELEVENLABS_TTS_MODEL_ID } from '@/realtime/elevenlabs/defaults';
+import { DEFAULT_ELEVENLABS_TTS_MODEL_ID, DEFAULT_ELEVENLABS_TTS_SPEED } from '@/realtime/elevenlabs/defaults';
 import { listElevenLabsVoices, type ElevenLabsVoiceSummary } from '@/realtime/elevenlabs/elevenLabsVoices';
 import { showElevenLabsAgentReuseDialog } from '@/voice/settings/modals/showElevenLabsAgentReuseDialog';
 
@@ -351,7 +351,7 @@ export function RealtimeElevenLabsSection(props: {
             detailFormatter: () => (tts.modelId ?? DEFAULT_ELEVENLABS_TTS_MODEL_ID),
           }}
           items={[
-            { id: '', title: DEFAULT_ELEVENLABS_TTS_MODEL_ID, subtitle: 'Default (cheaper, 32 languages).' },
+            { id: '', title: DEFAULT_ELEVENLABS_TTS_MODEL_ID, subtitle: 'Default (cheaper, English).' },
             { id: 'eleven_multilingual_v2', title: 'eleven_multilingual_v2', subtitle: 'Higher quality, higher cost.' },
             { id: 'eleven_turbo_v2', title: 'eleven_turbo_v2', subtitle: 'Lower latency (if available on your plan).' },
             { id: 'custom', title: 'Custom…', subtitle: 'Enter a model id.' },
@@ -504,14 +504,14 @@ export function RealtimeElevenLabsSection(props: {
 
         <Item
           title="Speed"
-          subtitle="0.5–2. Leave blank for default."
-          detail={tts.voiceSettings.speed === null ? 'Default' : String(tts.voiceSettings.speed)}
+          subtitle={`0.5–2. Default ${DEFAULT_ELEVENLABS_TTS_SPEED} for new agents.`}
+          detail={tts.voiceSettings.speed === null ? String(DEFAULT_ELEVENLABS_TTS_SPEED) : String(tts.voiceSettings.speed)}
           onPress={() => {
             fireAndForget((async () => {
               const raw = await Modal.prompt(
                 'Speed (0.5–2)',
-                'Enter a number between 0.5 and 2. Leave blank to use the default.',
-                { inputType: 'numeric', placeholder: tts.voiceSettings.speed === null ? '' : String(tts.voiceSettings.speed) },
+                `Enter a number between 0.5 and 2. Leave blank to use the default (${DEFAULT_ELEVENLABS_TTS_SPEED}).`,
+                { inputType: 'numeric', placeholder: tts.voiceSettings.speed === null ? String(DEFAULT_ELEVENLABS_TTS_SPEED) : String(tts.voiceSettings.speed) },
               );
               if (raw === null) return;
               const trimmed = String(raw).trim();

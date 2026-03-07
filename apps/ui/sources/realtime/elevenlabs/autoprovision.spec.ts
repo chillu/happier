@@ -83,7 +83,7 @@ describe('ElevenLabs BYO autoprov', () => {
     const body = JSON.parse(fetchMock().mock.calls[1]?.[1]?.body);
     expect(body.conversation_config.agent.prompt.tool_ids).toEqual(requiredToolNames.map((name) => `tool_${name}`));
     expect(body.conversation_config.tts?.voice_id).toBe('EST9Ui6982FZPSi7gCHi');
-    expect(body.conversation_config.tts?.model_id).toBe('eleven_turbo_v2_5');
+    expect(body.conversation_config.tts?.model_id).toBe('eleven_flash_v2');
     expect(body.conversation_config.agent.prompt.prompt).toContain('{{initialConversationContext}}');
     expect(body.conversation_config.agent.prompt.prompt).toContain('{{sessionId}}');
     expect(String(body.conversation_config.agent.prompt.prompt)).not.toMatch(/Claude Code/i);
@@ -245,14 +245,14 @@ describe('ElevenLabs BYO autoprov', () => {
       apiKey: 'xi_test',
       tts: {
         voiceId: 'voice_custom',
-        modelId: 'eleven_turbo_v2_5',
+        modelId: 'eleven_flash_v2',
         voiceSettings: { stability: 0.45, similarityBoost: 0.75, useSpeakerBoost: true },
       },
     } as any);
 
     const body = JSON.parse(fetchMock().mock.calls[1]?.[1]?.body);
     expect(body.conversation_config.tts?.voice_id).toBe('voice_custom');
-    expect(body.conversation_config.tts?.model_id).toBe('eleven_turbo_v2_5');
+    expect(body.conversation_config.tts?.model_id).toBe('eleven_flash_v2');
     expect(body.conversation_config.tts?.voice_settings?.stability).toBe(0.45);
     expect(body.conversation_config.tts?.voice_settings?.similarity_boost).toBe(0.75);
     expect(body.conversation_config.tts?.voice_settings?.use_speaker_boost).toBe(true);
