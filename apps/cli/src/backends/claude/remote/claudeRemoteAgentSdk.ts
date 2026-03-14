@@ -581,6 +581,13 @@ export async function claudeRemoteAgentSdk(opts: {
         };
     }
 
+    // In safe-yolo mode (mapped to acceptEdits), auto-enable sandbox with autoAllowBashIfSandboxed
+    // so Bash/Skill tool calls don't trigger permission prompts. acceptEdits alone only auto-approves
+    // file-editing tools (Edit/Write/etc.), leaving Bash calls to the approval flow.
+    if (mappedPermissionMode === 'acceptEdits' && !queryOptions.sandbox) {
+        queryOptions.sandbox = { enabled: true, autoAllowBashIfSandboxed: true };
+    }
+
     if (advancedOptions) {
         const allowlistedKeys = [
             'plugins',
