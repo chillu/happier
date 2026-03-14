@@ -1625,7 +1625,7 @@ export const zhHans: TranslationStructure = {
       agentIdDescription: "输入您在 ElevenLabs 控制台中的代理 ID。",
       agentIdPlaceholder: "agent_...",
       apiKey: "API 密钥",
-      apiKeySet: "已设置",
+      apiKeySet: "\u2713 已保存",
       apiKeyNotSet: "未设置",
       apiKeyTitle: "ElevenLabs API 密钥",
       apiKeyDescription:
@@ -1660,7 +1660,7 @@ export const zhHans: TranslationStructure = {
       localhostWarning:
         '注意："localhost" 和 "127.0.0.1" 通常无法在手机上使用。请使用电脑的局域网 IP 或隧道。',
       notSet: "未设置",
-      apiKeySet: "已设置",
+      apiKeySet: "\u2713 已保存",
       apiKeyNotSet: "未设置",
       baseUrlPlaceholder: "http://192.168.1.10:8000/v1",
       apiKeyPlaceholder: "可选",

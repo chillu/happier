@@ -2011,7 +2011,7 @@ export const it: TranslationStructure = {
         "Inserisci l’ID agente dalla dashboard di ElevenLabs.",
       agentIdPlaceholder: "agent_...",
       apiKey: "Chiave API",
-      apiKeySet: "Impostata",
+      apiKeySet: "\u2713 Salvata",
       apiKeyNotSet: "Non impostata",
       apiKeyTitle: "Chiave API di ElevenLabs",
       apiKeyDescription:
@@ -2048,7 +2048,7 @@ export const it: TranslationStructure = {
       localhostWarning:
         'Nota: "localhost" e "127.0.0.1" di solito non funzionano sul telefono. Usa l’IP LAN del computer o un tunnel.',
       notSet: "Non impostato",
-      apiKeySet: "Impostata",
+      apiKeySet: "\u2713 Salvata",
       apiKeyNotSet: "Non impostata",
       baseUrlPlaceholder: "http://192.168.1.10:8000/v1",
       apiKeyPlaceholder: "Opzionale",

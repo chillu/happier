@@ -1979,7 +1979,7 @@ export const ja: TranslationStructure = {
         "ElevenLabs ダッシュボードにあるエージェントIDを入力してください。",
       agentIdPlaceholder: "agent_...",
       apiKey: "APIキー",
-      apiKeySet: "設定済み",
+      apiKeySet: "\u2713 保存済み",
       apiKeyNotSet: "未設定",
       apiKeyTitle: "ElevenLabs APIキー",
       apiKeyDescription:
@@ -2015,7 +2015,7 @@ export const ja: TranslationStructure = {
       localhostWarning:
         '注意: "localhost" と "127.0.0.1" は通常スマホでは動きません。PC の LAN IP かトンネルを使用してください。',
       notSet: "未設定",
-      apiKeySet: "設定済み",
+      apiKeySet: "\u2713 保存済み",
       apiKeyNotSet: "未設定",
       baseUrlPlaceholder: "http://192.168.1.10:8000/v1",
       apiKeyPlaceholder: "任意",

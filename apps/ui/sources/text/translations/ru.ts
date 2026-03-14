@@ -1713,7 +1713,7 @@ export const ru: TranslationStructure = {
       agentIdDescription: "Введите ID агента из панели управления ElevenLabs.",
       agentIdPlaceholder: "agent_...",
       apiKey: "API-ключ",
-      apiKeySet: "Установлено",
+      apiKeySet: "\u2713 Сохранён",
       apiKeyNotSet: "Не установлено",
       apiKeyTitle: "API-ключ ElevenLabs",
       apiKeyDescription:
@@ -1751,7 +1751,7 @@ export const ru: TranslationStructure = {
       localhostWarning:
         "Примечание: «localhost» и «127.0.0.1» обычно не работают на телефонах. Используйте LAN IP компьютера или туннель.",
       notSet: "Не установлено",
-      apiKeySet: "Установлено",
+      apiKeySet: "\u2713 Сохранён",
       apiKeyNotSet: "Не установлено",
       baseUrlPlaceholder: "http://192.168.1.10:8000/v1",
       apiKeyPlaceholder: "Необязательно",

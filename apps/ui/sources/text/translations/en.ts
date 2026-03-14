@@ -1514,7 +1514,7 @@ export const en = {
             agentIdDescription: 'If you used "Create Happier Agent", this is filled automatically. Otherwise copy the Agent ID from ElevenLabs.',
             agentIdPlaceholder: 'agent_...',
             apiKey: 'API Key',
-            apiKeySet: 'Set',
+            apiKeySet: '\u2713 Saved',
             apiKeyNotSet: 'Not set',
             apiKeyTitle: 'ElevenLabs API Key',
             apiKeyDescription:
@@ -1547,7 +1547,7 @@ export const en = {
             footer: 'Configure OpenAI-compatible endpoints for speech-to-text (STT) and text-to-speech (TTS).\n\nWeb note: your endpoint must allow CORS (and respond to OPTIONS preflight) for Test STT/TTS to work in the browser.',
             localhostWarning: 'Note: "localhost" and "127.0.0.1" usually won’t work on phones. Use your computer’s LAN IP or a tunnel.',
             notSet: 'Not set',
-            apiKeySet: 'Set',
+            apiKeySet: '\u2713 Saved',
             apiKeyNotSet: 'Not set',
             baseUrlPlaceholder: 'http://192.168.1.10:8000/v1',
             apiKeyPlaceholder: 'Optional',

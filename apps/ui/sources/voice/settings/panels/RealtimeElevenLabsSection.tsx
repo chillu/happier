@@ -234,6 +234,7 @@ export function RealtimeElevenLabsSection(props: {
           title={t('settingsVoice.byo.apiKeyTitle')}
           subtitle={t('settingsVoice.byo.apiKeyDescription')}
           detail={cfg.byo.apiKey ? t('settingsVoice.byo.apiKeySet') : t('settingsVoice.byo.apiKeyNotSet')}
+          detailStyle={cfg.byo.apiKey ? { color: theme.colors.success } : undefined}
           onPress={() => {
             fireAndForget((async () => {
               const raw = await Modal.prompt(
@@ -250,6 +251,7 @@ export function RealtimeElevenLabsSection(props: {
           title={t('settingsVoice.byo.agentIdTitle')}
           subtitle={t('settingsVoice.byo.agentIdDescription')}
           detail={cfg.byo.agentId ? String(cfg.byo.agentId) : t('settingsVoice.byo.agentIdNotSet')}
+          detailStyle={cfg.byo.agentId ? { color: theme.colors.success } : undefined}
           onPress={() => {
             fireAndForget((async () => {
               const value = await Modal.prompt(
