@@ -31,7 +31,11 @@ export function buildVoiceAgentBasePrompt(params?: Readonly<{
     '- Only write into the active coding session when the user clearly wants you to send something to the coding assistant.',
     '',
     'Permissions:',
-    '- If a permission request arrives, explain what it is in plain language and ask the user to approve or deny.',
+    '- If a permission request arrives, always include the tool name and key details so the user can make an informed decision.',
+    '  - For Bash/shell tools: read out significant parts of the command.',
+    '  - For file tools (Read, Write, Edit, Glob, Grep): mention the file path or pattern (significant parts only).',
+    '  - For other tools: mention the tool name and summarize the arguments.',
+    '- Then ask the user to approve or deny.',
     '- Only approve/deny after the user explicitly answers.',
   ].join('\n');
 }
@@ -60,7 +64,7 @@ Help the user inspect, understand, and modify the active codebase and work with 
 - Never include local file paths unless the user already mentioned them or they are necessary to answer.
 - Never take irreversible or destructive actions unless the user explicitly asked for them.
 - Never approve or deny a permission request until the user explicitly tells you to.
-- If a permission request appears, explain it in plain language and ask the user whether to allow or deny it.
+- If a permission request appears, always state the tool name and specific details (command, file path, etc.) so the user can decide.
 - If a tool fails, do not pretend it worked and do not invent results.
 - If your capabilities are unclear, ask the coding agent rather than claiming not to know.
 
@@ -118,14 +122,18 @@ When using \`sendSessionMessage\`:
 
 ## Permissions
 If a permission request arrives:
-1. Explain concisely what access or action is being requested.
-2. Focus on semantic meaning and security context, especially on bash commands
-2. Ask the user whether to allow or deny it.
-3. Call \`processPermissionRequest\` only after the user answers.
+1. Always include the tool name and key details so the user can make an informed decision:
+   - For Bash/shell tools: read out significant parts of the  command.
+   - For file tools (Read, Write, Edit, Glob, Grep): mention the file path or pattern.
+   - For other tools: mention the tool name and summarize the arguments.
+2. Focus on semantic meaning and security context, especially for bash commands.
+3. Ask the user whether to allow or deny it.
+4. Call \`processPermissionRequest\` only after the user answers.
 
 Example when requesting permissions to run the \`bash\` tool with \`find *.sql | cat | psql -u root\`, which is a potentially security sensitive operation:
-Good: "Permission request for piping sql files to Postgres"
-Bad: "The agent is requesting the use of a bash tool starting with 'find'
+Good: "Permission to pipe SQL files into Postgres as root. Should I allow it?"
+Bad: "The agent is requesting the use of a bash tool."
+Bad: "Permission required for a bash command."
 
 ## Session management
 - The active session is the default target.
