@@ -13,7 +13,7 @@ describe('resolveClaudeRemoteSessionStartPlan', () => {
         claudeArgs: ['--continue'],
       },
       {
-        checkSession: () => true,
+        checkSessionDetailed: () => 'valid',
         findLastSession: () => null,
         logDebug: vi.fn(),
         logPrefix: 'claudeRemote',
@@ -33,7 +33,7 @@ describe('resolveClaudeRemoteSessionStartPlan', () => {
         claudeArgs: ['--continue'],
       },
       {
-        checkSession: () => true,
+        checkSessionDetailed: () => 'valid',
         findLastSession: () => null,
         logDebug: vi.fn(),
         logPrefix: 'claudeRemote',
@@ -53,7 +53,7 @@ describe('resolveClaudeRemoteSessionStartPlan', () => {
         claudeArgs: ['--continue', '--resume', 'resume-123'],
       },
       {
-        checkSession: () => true,
+        checkSessionDetailed: () => 'valid',
         findLastSession: () => null,
         logDebug: vi.fn(),
         logPrefix: 'claudeRemoteAgentSdk',
@@ -73,7 +73,7 @@ describe('resolveClaudeRemoteSessionStartPlan', () => {
         claudeArgs: ['--resume'],
       },
       {
-        checkSession: () => true,
+        checkSessionDetailed: () => 'valid',
         findLastSession: () => 'last-session-id',
         logDebug: vi.fn(),
         logPrefix: 'claudeRemoteAgentSdk',
@@ -81,5 +81,51 @@ describe('resolveClaudeRemoteSessionStartPlan', () => {
     );
 
     expect(result).toEqual({ startFrom: 'last-session-id', shouldContinue: false });
+  });
+
+  it('starts fresh session when transcript file is missing', () => {
+    const logDebug = vi.fn();
+    const result = resolveClaudeRemoteSessionStartPlan(
+      {
+        sessionId: 'session-no-file',
+        transcriptPath: null,
+        path: '/tmp/workspace',
+        claudeConfigDir: null,
+      },
+      {
+        checkSessionDetailed: () => 'file_missing',
+        findLastSession: () => null,
+        logDebug,
+        logPrefix: 'claudeRemote',
+      },
+    );
+
+    expect(result).toEqual({ startFrom: null, shouldContinue: false });
+    expect(logDebug).toHaveBeenCalledWith(
+      expect.stringContaining('starting fresh session'),
+    );
+  });
+
+  it('attempts resume when transcript file exists but content is not yet valid', () => {
+    const logDebug = vi.fn();
+    const result = resolveClaudeRemoteSessionStartPlan(
+      {
+        sessionId: 'session-empty-file',
+        transcriptPath: null,
+        path: '/tmp/workspace',
+        claudeConfigDir: null,
+      },
+      {
+        checkSessionDetailed: () => 'invalid_content',
+        findLastSession: () => null,
+        logDebug,
+        logPrefix: 'claudeRemote',
+      },
+    );
+
+    expect(result).toEqual({ startFrom: 'session-empty-file', shouldContinue: false });
+    expect(logDebug).toHaveBeenCalledWith(
+      expect.stringContaining('attempting resume anyway'),
+    );
   });
 });

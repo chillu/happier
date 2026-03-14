@@ -3,7 +3,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getProjectPath } from "./path";
 
-export function claudeCheckSession(sessionId: string, path: string, transcriptPath?: string | null) {
+export type SessionCheckResult = 'valid' | 'file_missing' | 'invalid_content';
+
+export function claudeCheckSession(sessionId: string, path: string, transcriptPath?: string | null): boolean {
+    return claudeCheckSessionDetailed(sessionId, path, transcriptPath) === 'valid';
+}
+
+export function claudeCheckSessionDetailed(sessionId: string, path: string, transcriptPath?: string | null): SessionCheckResult {
     const projectDir = getProjectPath(path);
 
     // Prefer explicit transcript path (from Claude hook) over the project-dir heuristic.
@@ -11,7 +17,7 @@ export function claudeCheckSession(sessionId: string, path: string, transcriptPa
     const sessionExists = existsSync(sessionFile);
     if (!sessionExists) {
         logger.debug(`[claudeCheckSession] Path ${sessionFile} does not exist`);
-        return false;
+        return 'file_missing';
     }
 
     // Check if session contains any messages with valid ID fields
@@ -37,5 +43,5 @@ export function claudeCheckSession(sessionId: string, path: string, transcriptPa
     // Log final validation result for observability
     logger.debug(`[claudeCheckSession] Session ${sessionId}: ${hasGoodMessage ? 'valid' : 'invalid'}`);
 
-    return hasGoodMessage;
+    return hasGoodMessage ? 'valid' : 'invalid_content';
 }
