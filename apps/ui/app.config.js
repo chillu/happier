@@ -194,7 +194,7 @@ const baseExpoConfig = {
                     NSAllowsArbitraryLoads: false,
                 },
             },
-            associatedDomains: appVariant === 'production' ? iosAssociatedDomains : []
+            associatedDomains: undefined // disabled for free Apple dev account
         },
         android: {
             adaptiveIcon: {
@@ -273,12 +273,13 @@ const baseExpoConfig = {
                     recordAudioAndroid: true
                 }
             ],
-            [
-                "expo-notifications",
-                {
-                    "enableBackgroundRemoteNotifications": true
-                }
-            ],
+            // [expo-notifications] disabled for free Apple dev account
+            // [
+            //     "expo-notifications",
+            //     {
+            //         "enableBackgroundRemoteNotifications": true
+            //     }
+            // ],
             [
                 'expo-splash-screen',
                 {
