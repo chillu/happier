@@ -65,6 +65,16 @@ export function VoicePrivacySection(props: { voice: VoiceSettings; setVoice: (ne
           <Switch value={privacy.sharePermissionRequests} onValueChange={(v) => setPrivacy({ sharePermissionRequests: v })} />
         }
       />
+      <Item
+        title={t('settingsVoice.privacy.shareToolArgs')}
+        subtitle={t('settingsVoice.privacy.shareToolArgsSubtitle')}
+        rightElement={<Switch value={privacy.shareToolArgs} onValueChange={(v) => setPrivacy({ shareToolArgs: v })} />}
+      />
+      <Item
+        title={t('settingsVoice.privacy.shareFilePaths')}
+        subtitle={t('settingsVoice.privacy.shareFilePathsSubtitle')}
+        rightElement={<Switch value={privacy.shareFilePaths} onValueChange={(v) => setPrivacy({ shareFilePaths: v })} />}
+      />
     </ItemGroup>
   );
 }

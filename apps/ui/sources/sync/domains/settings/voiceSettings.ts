@@ -311,11 +311,6 @@ export function voiceSettingsParse(input: unknown): VoiceSettings {
     if (s8.success) base.privacy.shareToolArgs = s8.data;
   }
 
-  // Privacy hardening: never allow sharing file paths or tool args over voice transport.
-  // This is intentionally enforced even if a persisted config attempts to enable it.
-  base.privacy.shareFilePaths = false;
-  base.privacy.shareToolArgs = false;
-
   // Adapters: parse with zod so per-adapter invalid fields don't blow away everything.
   if (raw.adapters && typeof raw.adapters === 'object') {
     const a = raw.adapters as Record<string, unknown>;
