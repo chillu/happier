@@ -32,6 +32,13 @@ interface PendingRequest {
     input: unknown;
 }
 
+/**
+ * Tool name tokens that should always be auto-approved without surfacing a permission prompt.
+ * These are internal housekeeping tools (e.g. title changes, memory saves) that don't warrant user interaction.
+ * Matches are token-based: the tool name is split on `__`, `/`, `.`, `:`, `\`, `-`, and whitespace.
+ */
+const ALWAYS_AUTO_APPROVE_TOOL_TOKENS = ['change_title', 'save_memory'] as const;
+
 export class PermissionHandler {
     private toolCalls: { id: string, name: string, input: any, used: boolean }[] = [];
     private responses = new Map<string, PermissionResponse>();
@@ -83,6 +90,11 @@ export class PermissionHandler {
         for (const [k, v] of sliced) out[k] = this.redactToolTraceValue(v, k);
         if (entries.length > 200) out._truncatedKeys = entries.length - 200;
         return out;
+    }
+
+    private isHousekeepingTool(toolName: string): boolean {
+        const tokens = toolName.toLowerCase().split(/__|[\\/.:\s-]+/g).filter(Boolean);
+        return ALWAYS_AUTO_APPROVE_TOOL_TOKENS.some((t) => tokens.includes(t));
     }
 
     private seedAllowlistFromAgentState(): void {
@@ -378,6 +390,13 @@ export class PermissionHandler {
         },
     ): Promise<PermissionResult> => {
         const rewrittenInput = this.rewriteToolInput(toolName, input);
+
+        // Auto-approve internal housekeeping tools (e.g. change_title, save_memory)
+        // so they never surface as permission prompts to the user/voice agent.
+        if (this.isHousekeepingTool(toolName)) {
+            logger.debug(`[Claude] Auto-approving housekeeping tool ${toolName}`);
+            return { behavior: 'allow', updatedInput: rewrittenInput as Record<string, unknown> };
+        }
 
         // Check if tool is explicitly allowed
         if (toolName === 'Bash') {
